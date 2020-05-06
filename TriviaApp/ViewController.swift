@@ -18,8 +18,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var progressBar: UIView!
     
+    
+    @IBOutlet weak var progressView: UIProgressView!
+    
     var myQuizBrain = QuizBrain()
     var number : Float = 0.0
+    var player : AVAudioPlayer!
+    var timer = Timer()
     
     
     override func viewDidLoad() {
@@ -39,9 +44,9 @@ class ViewController: UIViewController {
                 
         //UPDATE THE PROGRESS BAR
         number = number + 0.1
-        progressBar.progress = number
+        progressView.progress = number
        
-            
+        myQuizBrain.endQuiz()
         
         //UPDATE THE QUESTION THAT APPEARS ON SCREEN
         questionLabel.text = myQuizBrain.retrieveQuestion()
@@ -51,9 +56,12 @@ class ViewController: UIViewController {
         
        
         //CONDITIONAL THAT WILL CHECK IF THE QUIZ IS OVER. SOME KIND ON SCREEN FEEDBACK SHOULD HAPPEN AT THIS POINT. DISPLAY SCORE, CONGRATULATE THE PLAYER, ETC
-        myQuizBrain.endQuiz()
-        
-        playSound(label : 35923_dr-skitz__yay(1))
+      
+        if (myQuizBrain.arrayIndex > 19){
+            questionLabel.text = "You're Done!"
+            playSound(label : "35923_dr-skitz__yay(1)")
+        }
+       
         
     }
     
@@ -74,15 +82,19 @@ class ViewController: UIViewController {
                 //Do you mean print something or display a word on the screen of the app?
         if chosenAnswer == true{
             sender.backgroundColor = UIColor.green //looked up on stackOverflow
-           
+          //score should increase
+        
         }
         else{
             sender.backgroundColor = UIColor.red
             //looked up on StackOverflow
         }
         
-        //USE A TIMER TO CALL UPDATEUI() TO CHANGE ON SCREEN ELEMENTS (UPDATE QUESTION TEXT, PROGRESS, SCORE, ETC). ITS A GOOD IDEA TO USE A TIMER SO WE CAN CONTROL HOW LONG THE COLOR CHANGES. EXAMPLE: USER PRESSES THE BUTTON->BUTTON COLOR CHANGES->TIMER FOR # OF SECONDS->CALL UPDATEUI() USING TIMER. REVIEW MUSICAPP FOR MORE REVIEW
         
+        
+        //USE A TIMER TO CALL UPDATEUI() TO CHANGE ON SCREEN ELEMENTS (UPDATE QUESTION TEXT, PROGRESS, SCORE, ETC). ITS A GOOD IDEA TO USE A TIMER SO WE CAN CONTROL HOW LONG THE COLOR CHANGES. EXAMPLE: USER PRESSES THE BUTTON->BUTTON COLOR CHANGES->TIMER FOR # OF SECONDS->CALL UPDATEUI() USING TIMER. REVIEW MUSICAPP FOR MORE REVIEW
+        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.updateUI), userInfo: nil, repeats: true)
+
         sender.alpha = 0.5
         //Code should execute after 0.2 second delay.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -94,7 +106,7 @@ class ViewController: UIViewController {
          
   }
     
-    func playSound() {
+    func playSound(label : String) {
         guard let url = Bundle.main.url(forResource: label, withExtension: "wav") else { return }
         
         do {
