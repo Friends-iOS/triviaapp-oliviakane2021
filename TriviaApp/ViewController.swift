@@ -40,7 +40,8 @@ class ViewController: UIViewController {
     @objc func updateUI(){
         
         //CLEAR ANY COLOR CHANGES (FOR INSTANCE, IF THE COLOR CHANGES WHEN USER GETS QUESTION RIGHT/WRONG, WE WANT THE COLOR TO CHANGE BACK AFTER THEY ANSWER THE QUESTION
-     
+      var answer = sender.currentTitle!
+        buttonPressed(sender.UIButton).backgroundColor = UIColor.blue
                 
         //UPDATE THE PROGRESS BAR
         number = number + 0.1
