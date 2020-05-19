@@ -60,7 +60,7 @@ struct QuizBrain{
    
     
 //variable for our array index - Int
-    var arrayIndex : Int = 0 // this is the beginning of the array
+    var arrayIndex : Int = -1 // this is the beginning of the array
     
 //variable for number of right answers - Int
     var scoreRight : Int = 0 //we start at zero
@@ -75,6 +75,9 @@ struct QuizBrain{
     //FORM: func function_name(user's answer (ie a String) -> returns a true or false
     //conditional statement that will return true if user's answer matches, false if not
     func checkAnswer (answer : String) -> Bool{
+        print("the arrayIndex is \(arrayIndex)")
+        print("the user's answer is \(answer)")
+        print(quiz[arrayIndex])
         if (answer == quiz[arrayIndex].answer){
             return true
         }
@@ -92,7 +95,7 @@ struct QuizBrain{
 //**FUNCTION - Retrieves user's progress (question number / total number of questions)
     //FORM: func functions_name() -> returns a number (ie Float)
     func progress () -> Float {
-        return Float(arrayIndex/20)
+        return Float(Float(arrayIndex)/Float(20))
     }
 
 //FUNCTION - retrieves user's score (score right / total number of answers)
@@ -106,9 +109,20 @@ struct QuizBrain{
     mutating func endQuiz (){
         arrayIndex = arrayIndex + 1
         
-        if (arrayIndex > 19){
-        arrayIndex = 0
+        if (arrayIndex < quiz.count - 1){
+            arrayIndex += 1;
+               
         }
+        //end of quiz
+        else{
+         arrayIndex = 0;
+         endOfQuiz = true;
+        
+     }
+        
+//        if (arrayIndex > 19){
+//        arrayIndex = 0
+//        }
     }
 }
 
